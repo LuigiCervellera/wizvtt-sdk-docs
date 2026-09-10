@@ -40,16 +40,20 @@ async function main() {
 
   if (!targetDir) {
     targetDir = await question('Nome della cartella del progetto (es. my-vtt-system): ');
-    targetDir = targetDir.trim() || 'my-vtt-system';
+    targetDir = (targetDir || 'my-vtt-system').trim();
   }
 
-  const systemName = await question('Nome del Gioco di Ruolo / Sistema (es. D&D 5e Custom): ') || targetDir;
-  const authorName = await question('Nome Autore / Studio: ') || 'WizVTT Creator';
+  const defaultSystemId = targetDir.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+  const inputSystemName = await question(`Nome del Gioco di Ruolo / Sistema [${targetDir}]: `);
+  const systemName = inputSystemName.trim() || targetDir;
+
+  const inputAuthor = await question('Nome Autore / Studio [WizVTT Creator]: ');
+  const authorName = inputAuthor.trim() || 'WizVTT Creator';
 
   rl.close();
 
   const root = path.resolve(process.cwd(), targetDir);
-  console.log(\n📦 Creazione progetto in: \x1b[36m\x1b[0m...);
+  console.log(`\n📦 Creazione progetto in: \x1b[36m${root}\x1b[0m...`);
 
   if (!fs.existsSync(root)) {
     fs.mkdirSync(root, { recursive: true });
@@ -62,8 +66,8 @@ async function main() {
   const pkgPath = path.join(root, 'package.json');
   if (fs.existsSync(pkgPath)) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-    pkg.name = targetDir.toLowerCase().replace(/\s+/g, '-');
-    pkg.description = ${systemName} - Scheda & Regole per WizVTT;
+    pkg.name = defaultSystemId;
+    pkg.description = `${systemName} - Scheda & Regole per WizVTT`;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
   }
 
@@ -71,16 +75,15 @@ async function main() {
   const systemIndexPath = path.join(root, 'src', 'systems', 'my-system', 'index.tsx');
   if (fs.existsSync(systemIndexPath)) {
     let sysCode = fs.readFileSync(systemIndexPath, 'utf-8');
-    sysCode = sysCode.replace(/id: 'my-system'/, id: '');
-    sysCode = sysCode.replace(/name: 'Custom RPG System'/, 
-ame: '');
-    sysCode = sysCode.replace(/author: 'Community Developer'/, uthor: '');
+    sysCode = sysCode.replace(/id:\s*['"]my-system['"]/, `id: '${defaultSystemId}'`);
+    sysCode = sysCode.replace(/name:\s*['"]Custom RPG System['"]/, `name: '${systemName}'`);
+    sysCode = sysCode.replace(/author:\s*['"]Community Developer['"]/, `author: '${authorName}'`);
     fs.writeFileSync(systemIndexPath, sysCode);
   }
 
   console.log('\x1b[32m%s\x1b[0m', '\n✨ Progetto creato con successo!');
   console.log('\nOra puoi iniziare con i seguenti comandi:');
-  console.log(  cd );
+  console.log(`  cd ${targetDir}`);
   console.log('  npm install   (oppure: bun install / pnpm install)');
   console.log('  npm run dev   (oppure: bun dev / pnpm dev)\n');
   console.log('💡 I file di configurazione AI (.cursorrules, SKILL.md) sono già inclusi!');
