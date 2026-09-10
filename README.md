@@ -357,15 +357,64 @@ La Sandbox (`npm run dev`) include una suite di strumenti pensata per rendere lo
 
 ---
 
-## 📤 Come Pubblicare o Inviare il Tuo Sistema a WizVTT
+## 📤 Guida: Come Sottomettere il Tuo Sistema (Pull Request & Revisione)
 
-Quando la tua scheda è pronta e testata:
+WizVTT accoglie con entusiasmo i sistemi RPG creati dalla community! Per garantire che la piattaforma rimanga stabile, sicura e compatibile per tutti i giocatori, ogni sistema viene sottoposto a un **controllo di sicurezza automatizzato (CI)** e a una **revisione umana da parte dei maintainer di WizVTT**.
 
-1. **Invia una Pull Request**:
-   - Apri una PR aggiungendo la cartella del tuo plugin in `src/plugins/systems/<nome-sistema>/`.
-2. **Oppure condividi il tuo repository**:
-   - Puoi pubblicare il tuo repo standalone e inviare una segnalazione alla community di WizVTT.
-3. Il plugin verrà registrato automaticamente tramite `import.meta.glob` ed entrerà a far parte dei sistemi disponibili sulla piattaforma!
+```
+┌─────────────────────────┐       ┌───────────────────────────────┐       ┌─────────────────────────────┐
+│ 🧑‍💻 Tu (Sviluppatore)     │       │ 🤖 CI Automated Check         │       │ 🛡️ Supervisione Umana       │
+│                         │       │                               │       │                             │
+│ 1. Fork & Sviluppo      │       │ 1. Security & Pattern Audit   │       │ 1. Review codice & layout   │
+│ 2. Test in Sandbox      │ ────► │ 2. TypeScript Build (tsc -b)  │ ────► │ 2. Test funzionale          │
+│ 3. npm run check-all    │       │ 3. Validazione Contratti SDK  │       │ 3. Merge & Pubblicazione su │
+│ 4. Apri Pull Request    │       │    (Esito Superato/Fallito)   │       │    WizVTT                   │
+└─────────────────────────┘       └───────────────────────────────┘       └─────────────────────────────┘
+```
+
+### 1. Fai il Fork e clona il repository
+1. Esegui il fork di questo repository su GitHub: [wizvtt-sdk-docs](https://github.com/LuigiCervellera/wizvtt-sdk-docs).
+2. Clona il tuo fork localmente e installa le dipendenze:
+   ```bash
+   git clone https://github.com/<TUO-USERNAME>/wizvtt-sdk-docs.git
+   cd wizvtt-sdk-docs
+   npm install
+   ```
+
+### 2. Sviluppa la tua Scheda
+1. Crea una cartella in `src/systems/<tuo-sistema-id>` (es. `src/systems/dungeon-world`).
+2. Puoi prendere come base il file `src/systems/my-system/index.tsx` o uno degli esempi (`generic.tsx`, `hybrid-pool.tsx`).
+3. Avvia la sandbox di sviluppo:
+   ```bash
+   npm run dev
+   ```
+4. Testa interattività, tiri di dado (`onRoll`), stili nei vari temi (`theme`) e viste (Master, Giocatore, Spettatore).
+
+### 3. Valida il Codice Localmente
+Prima di aprire la PR, esegui il controllo automatico di sicurezza e compilazione:
+```bash
+npm run check-all
+```
+* **Cosa verifica:**
+  - Assenza di codice non sicuro (`eval`, manipolazioni di cookie o storage di sessione, chiamate di rete esterne non autorizzate).
+  - Rispetto del contratto TypeScript `SystemDefinition`.
+  - Assenza di errori di compilazione/bundle.
+
+### 4. Apri la Pull Request
+1. Esegui il commit e fai il push sul tuo repository:
+   ```bash
+   git checkout -b feature/mio-nuovo-sistema
+   git add .
+   git commit -m "feat(system): aggiungi supporto per [Nome Sistema]"
+   git push origin feature/mio-nuovo-sistema
+   ```
+2. Apri una Pull Request verso il branch `main` di `wizvtt-sdk-docs`.
+3. Compila il **Pull Request Template** che apparirà automaticamente (descrizione del sistema, tipo di dadi, screenshot della scheda in azione).
+
+### 5. Revisione Umana e Approvazione
+- Il bot di CI controllerà che il codice compili e rispetti gli standard di sicurezza.
+- Un maintainer di WizVTT verificherà l'interfaccia, i metadati e il funzionamento.
+- Una volta approvata e mergiata la PR, il sistema verrà inserito nel catalogo ufficiale di WizVTT e reso disponibile per tutti gli utenti!
 
 ---
 
