@@ -1,0 +1,1 @@
+{"root":["./src/sandbox/app.tsx","./src/sandbox/mockrollengine.ts","./src/sandbox/main.tsx","./src/sdk/dice.ts","./src/sdk/dicepool.ts","./src/sdk/index.ts","./src/sdk/theme.ts","./src/sdk/types.ts","./src/sdk/components/ui.tsx","./src/systems/examples/generic.tsx","./src/systems/examples/hybrid-pool.tsx","./src/systems/my-system/index.tsx"],"version":"5.7.3"}
