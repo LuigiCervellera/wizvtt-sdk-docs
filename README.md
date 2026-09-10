@@ -16,7 +16,8 @@ Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i 
 
 1. [⚡ Avvio Rapido](#-avvio-rapido)
 2. [📂 Struttura del Progetto](#-struttura-del-progetto)
-3. [🛠️ Guida allo Sviluppo di un Sistema](#️-guida-allo-sviluppo-di-un-sistema)
+3. [🤖 Sviluppo Assistito con AI (Cursor & Claude Code)](#-sviluppo-assistito-con-ai-cursor--claude-code)
+4. [🛠️ Guida allo Sviluppo di un Sistema](#️-guida-allo-sviluppo-di-un-sistema)
    - [1. Definire il Plugin (`defineGameSystem`)](#1-definire-il-plugin-definegamesystem)
    - [2. Lancio Dadi & Anti-Cheat (`formatRollParams` e `onRollComplete`)](#2-lancio-dadi--anti-cheat-formatrollparams-e-onrollcomplete)
    - [3. Motore di Temi (7 Stili RPG Scuri & Classi Semantiche)](#3-motore-di-temi-7-stili-rpg-scuri--classi-semantiche)
@@ -24,9 +25,9 @@ Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i 
    - [5. Motore per Pool di Dadi Ibridi (`evaluateDicePool`)](#5-motore-per-pool-di-dadi-ibridi-evaluatedicepool)
    - [6. Proiezione "Mostra a Schermo" (`onShowAsset`)](#6-proiezione-mostra-a-schermo-onshowasset)
    - [7. Import / Export Scheda in JSON](#7-import--export-scheda-in-json)
-4. [🧰 Funzionalità della Developer Sandbox](#-funzionalità-della-developer-sandbox)
-5. [📤 Come Pubblicare o Inviare il Tuo Sistema a WizVTT](#-come-pubblicare-o-inviare-il-tuo-sistema-a-wizvtt)
-6. [📄 Licenza & Contributi](#-licenza--contributi)
+5. [🧰 Funzionalità della Developer Sandbox](#-funzionalità-della-developer-sandbox)
+6. [📤 Come Sottomettere il Tuo Sistema (PR & Revisione)](#-guida-come-sottomettere-il-tuo-sistema-pull-request--revisione)
+7. [📄 Licenza & Contributi](#-licenza--contributi)
 
 ---
 
@@ -90,6 +91,32 @@ wizvtt-system-starter/
 │       ├── index.css         # Stili Tailwind v4 e variabili tema
 │       └── main.tsx          # Inizializzazione React
 ```
+
+---
+
+## 🤖 Sviluppo Assistito con AI (Cursor & Claude Code)
+
+Questo repository include già le istruzioni e i prompt di contesto affinché i moderni assistenti AI di coding (come **Cursor**, **Claude Code**, **Copilot**, ecc.) possano generare schede personaggio perfette, tipizzate e conformi agli standard di WizVTT.
+
+### 🔌 Installazione Rapida in qualsiasi progetto (via CLI)
+
+Se stai creando una scheda in un altro progetto o vuoi caricare la skill nel tuo assistente locale:
+
+**Per Claude Code / Antigravity / Agent CLI:**
+```bash
+# Scarica la skill direttamente nella cartella delle skill del tuo progetto
+mkdir -p .agents/skills/wizvtt-sdk
+curl -o .agents/skills/wizvtt-sdk/SKILL.md https://raw.githubusercontent.com/LuigiCervellera/wizvtt-sdk-docs/main/SKILL.md
+```
+
+**Per Cursor:**
+```bash
+# Scarica il file .cursorrules nella radice del tuo workspace
+curl -o .cursorrules https://raw.githubusercontent.com/LuigiCervellera/wizvtt-sdk-docs/main/.cursorrules
+```
+
+### 💡 Esempio di Prompt da dare all'AI una volta caricata la Skill:
+> *"Crea una nuova scheda per il gioco 'Vampiri: La Masquerade' in `src/systems/vtm-v5/index.tsx`. Utilizza il tema 'dark_fantasy', definisci attributi e abilità usando i componenti `PipTracker` dell'SDK e implementa i tiri di dado usando il motore `evaluateDicePool` con successo sui tiri >= 6."*
 
 ---
 
