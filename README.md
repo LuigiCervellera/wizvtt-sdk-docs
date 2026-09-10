@@ -38,8 +38,8 @@ Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i 
 ### 1. Installazione
 ```bash
 # Clona il repository
-git clone https://github.com/tuo-account/wizvtt-system-starter.git
-cd wizvtt-system-starter
+git clone https://github.com/LuigiCervellera/wizvtt-sdk-docs.git
+cd wizvtt-sdk-docs
 
 # Installa le dipendenze
 npm install
