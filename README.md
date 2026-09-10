@@ -34,29 +34,81 @@ Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i 
 ## ⚡ Avvio Rapido
 
 ### Prerequisiti
-- **Node.js** (v20 o superiore) oppure **Bun** (v1.1 o superiore).
+- **Node.js** (v20 o superiore) oppure **Bun** (v1.1 o superiore) o **pnpm / yarn**.
 
-### 1. Installazione
+### 1. Inizializzazione rapida con `degit` (Consigliato)
+Crea direttamente il tuo nuovo progetto senza scaricare la cronologia git:
+
 ```bash
-# Clona il repository
-git clone https://github.com/LuigiCervellera/wizvtt-sdk-docs.git
-cd wizvtt-sdk-docs
+# Con npx (NPM)
+npx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
 
-# Installa le dipendenze
+# Con Bun
+bunx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
+
+# Con pnpm
+pnpx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
+```
+
+*Oppure clona direttamente con Git:*
+```bash
+git clone https://github.com/LuigiCervellera/wizvtt-sdk-docs.git mio-sistema-rpg
+```
+
+---
+
+### 2. Installazione delle Dipendenze
+
+Entra nella cartella creata ed installa i pacchetti con il tuo gestore preferito:
+
+```bash
+cd mio-sistema-rpg
+
+# Usando npm:
 npm install
+
+# Usando bun:
+bun install
+
+# Usando pnpm:
+pnpm install
+
+# Usando yarn:
+yarn install
 ```
 
-### 2. Avvia la Developer Sandbox
+---
+
+### 3. Avvia la Developer Sandbox
+
 ```bash
+# Con npm
 npm run dev
+
+# Con bun
+bun dev
+
+# Con pnpm
+pnpm dev
+
+# Con yarn
+yarn dev
 ```
 
-La Sandbox di sviluppo si aprirà automaticamente su **`http://localhost:3000`**.
+La Sandbox di sviluppo si aprirà automaticamente su **`http://localhost:3000`** con Hot Module Replacement (HMR).
 
-### 3. Build di Verifica
-Per verificare la validità dei tipi TypeScript e la compilazione del pacchetto:
+---
+
+### 4. Test e Verifica del Codice
+
+Prima di aprire una Pull Request per inviare il tuo sistema:
 ```bash
-npm run build
+# Esegui il test di validazione sicurezza e build TypeScript:
+npm run check-all
+# oppure con bun:
+bun run check-all
+# oppure con pnpm:
+pnpm check-all
 ```
 
 ---
