@@ -1,94 +1,376 @@
 # 🎲 WizVTT Game System Starter & Developer Sandbox
 
-Benvenuto nello **Starter Kit ufficiale per sviluppatori e creatori della community** di [WizVTT](https://wizvtt.com).
+[![License: MIT / CC BY-NC-SA 4.0](https://img.shields.io/badge/License-MIT%20%2F%20CC%20BY--NC--SA%204.0-purple.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue.svg)](https://www.typescript.org/)
+[![React 19](https://img.shields.io/badge/React-19.0+-61dafb.svg)](https://react.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4.0+-38bdf8.svg)](https://tailwindcss.com/)
+[![WizVTT Platform](https://img.shields.io/badge/WizVTT-Live-a855f7.svg)](https://wizvtt.com)
 
-Questo repository indipendente contiene tutto il necessario per sviluppare, testare e distribuire nuovi sistemi di gioco di ruolo (Pathfinder, Cyberpunk, Call of Cthulhu, Not the End, Homebrew, ecc.) in locale **senza dover installare o configurare il backend di WizVTT**.
+Benvenuto nello **Starter Kit & Developer Sandbox ufficiale per la community di [WizVTT](https://wizvtt.com)**.
+
+Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i componenti grafici e un **banco di prova locale con Hot Module Replacement (HMR)** per sviluppare, testare e rifinire schede personaggio per qualsiasi gioco di ruolo da tavolo (*Pathfinder, Cyberpunk, Call of Cthulhu, Warhammer, Not the End, Kids on Bikes, Homebrew*, ecc.) in totale autonomia, **senza dover installare o avviare il backend di WizVTT**.
 
 ---
 
-## ⚡ Quick Start (Avvio Rapido in 1 Minuto)
+## 📑 Indice
 
-### 1. Clona e Installa le Dipendenze
+1. [⚡ Avvio Rapido](#-avvio-rapido)
+2. [📂 Struttura del Progetto](#-struttura-del-progetto)
+3. [🛠️ Guida allo Sviluppo di un Sistema](#️-guida-allo-sviluppo-di-un-sistema)
+   - [1. Definire il Plugin (`defineGameSystem`)](#1-definire-il-plugin-definegamesystem)
+   - [2. Lancio Dadi & Anti-Cheat (`formatRollParams` e `onRollComplete`)](#2-lancio-dadi--anti-cheat-formatrollparams-e-onrollcomplete)
+   - [3. Motore di Temi (7 Stili RPG Scuri & Classi Semantiche)](#3-motore-di-temi-7-stili-rpg-scuri--classi-semantiche)
+   - [4. UI Kit Primitivo (`TraitChip`, `PipTracker`, `StepperControl`, ecc.)](#4-ui-kit-primitivo-traitchip-piptracker-steppercontrol-ecc)
+   - [5. Motore per Pool di Dadi Ibridi (`evaluateDicePool`)](#5-motore-per-pool-di-dadi-ibridi-evaluatedicepool)
+   - [6. Proiezione "Mostra a Schermo" (`onShowAsset`)](#6-proiezione-mostra-a-schermo-onshowasset)
+   - [7. Import / Export Scheda in JSON](#7-import--export-scheda-in-json)
+4. [🧰 Funzionalità della Developer Sandbox](#-funzionalità-della-developer-sandbox)
+5. [📤 Come Pubblicare o Inviare il Tuo Sistema a WizVTT](#-come-pubblicare-o-inviare-il-tuo-sistema-a-wizvtt)
+6. [📄 Licenza & Contributi](#-licenza--contributi)
+
+---
+
+## ⚡ Avvio Rapido
+
+### Prerequisiti
+- **Node.js** (v20 o superiore) oppure **Bun** (v1.1 o superiore).
+
+### 1. Installazione
 ```bash
+# Clona il repository
 git clone https://github.com/tuo-account/wizvtt-system-starter.git
 cd wizvtt-system-starter
+
+# Installa le dipendenze
 npm install
 ```
 
-### 2. Avvia la Developer Sandbox Locale
+### 2. Avvia la Developer Sandbox
 ```bash
 npm run dev
 ```
-La Sandbox di sviluppo si aprirà automaticamente nel tuo browser su `http://localhost:3000`.
+
+La Sandbox di sviluppo si aprirà automaticamente su **`http://localhost:3000`**.
+
+### 3. Build di Verifica
+Per verificare la validità dei tipi TypeScript e la compilazione del pacchetto:
+```bash
+npm run build
+```
 
 ---
 
-## 🛠️ Come Creare il Tuo Sistema di Gioco
+## 📂 Struttura del Progetto
 
-1. Apri la cartella **`src/systems/my-system/`**.
-2. Modifica il file `index.tsx` definendo le statistiche, i tiri e il layout React della tua scheda.
-3. Salva: la Sandbox su `http://localhost:3000` si aggiorna all'istante con Hot Module Replacement (HMR).
+```text
+wizvtt-system-starter/
+├── package.json              # Dipendenze (Vite 8, React 19, Tailwind v4, Lucide, Sonner)
+├── tsconfig.json             # Configurazione TypeScript strict
+├── vite.config.ts            # Configurazione Vite con alias @/
+├── index.html                # Entry point per la Workbench Sandbox
+├── README.md                 # Questo manuale di istruzioni
+├── src/
+│   ├── sdk/                  # SDK WizVTT Open Source completo
+│   │   ├── types.ts          # Definizioni e interfacce TypeScript
+│   │   ├── dice.ts           # Helper tiri (formatRollParams, parseAndRollSingle)
+│   │   ├── dicePool.ts       # Valutatore pool ibridi (KotR:A, Year Zero, WoD)
+│   │   ├── theme.ts          # Definizioni dei 7 Temi RPG e classi semantiche
+│   │   ├── components/       # UI Kit (TraitChip, PipTracker, StepperControl, StatBox, ecc.)
+│   │   │   └── ui.tsx
+│   │   └── index.ts          # Export centralizzato dell'SDK
+│   ├── systems/              # Cartella dei sistemi di gioco
+│   │   ├── my-system/        # 🚀 IL TUO SISTEMA: Modifica questo file per iniziare!
+│   │   │   └── index.tsx
+│   │   └── examples/         # Sistemi di riferimento inclusi
+│   │       ├── generic.tsx   # Scheda generica minimalista
+│   │       └── hybrid-pool.tsx# Scheda per sistema basato su pool di dadi
+│   └── sandbox/              # Banco di prova locale interattivo
+│       ├── App.tsx           # Layout Workbench (selettore temi, console tiri, ispettore JSON)
+│       ├── MockRollEngine.ts # Simulatore client-side di onRollDice
+│       ├── index.css         # Stili Tailwind v4 e variabili tema
+│       └── main.tsx          # Inizializzazione React
+```
 
-### Esempio Minimo (`src/systems/my-system/index.tsx`):
+---
+
+## 🛠️ Guida allo Sviluppo di un Sistema
+
+### 1. Definire il Plugin (`defineGameSystem`)
+
+Ogni sistema di gioco esporta un oggetto conforme all'interfaccia `GameSystemPlugin` creato tramite l'helper `defineGameSystem`.
+
+Modifica **`src/systems/my-system/index.tsx`**:
 
 ```tsx
 import React from 'react';
-import { defineGameSystem, CharacterSheetProps, formatRollParams, StatBox, FieldBox } from '@/sdk';
+import {
+  defineGameSystem,
+  type CharacterSheetProps,
+  type GameSystemPlugin,
+  formatRollParams,
+  StatBox,
+  FieldBox,
+  PipTracker,
+  PluginSectionCard,
+} from '@/sdk';
 
-const MioSheet: React.FC<CharacterSheetProps> = ({ schedaDati, onUpdate, onRollDice, isOwner, isMaster }) => {
+const MySystemSheet: React.FC<CharacterSheetProps> = ({
+  schedaDati,
+  isOwner,
+  isMaster,
+  onUpdate,
+  onRollDice,
+}) => {
+  const isEditingDisabled = !isOwner && !isMaster;
+
+  const handleStatChange = (key: string, value: any) => {
+    onUpdate({ ...schedaDati, [key]: value });
+  };
+
+  const handleRoll = (statName: string, value: number) => {
+    const mod = Math.floor((Number(value || 10) - 10) / 2);
+    const sign = mod >= 0 ? '+' : '';
+    
+    // Formatta il tiro tenendo conto di Vantaggio e Riservatezza
+    const req = formatRollParams({
+      formula: `1d20${sign}${mod}`,
+      label: `Tiro ${statName}`,
+      rollMode: schedaDati.rollMode, // 'normal' | 'advantage' | 'disadvantage'
+      rollVisibility: schedaDati.rollVisibility, // 'public' | 'private'
+    });
+
+    onRollDice?.(req.formula, req.label, req.sources, req.description, req.options);
+  };
+
   return (
-    <div className="p-4 bg-surface text-text-main rounded-2xl border border-border-app space-y-4">
-      <FieldBox
-        label="Nome Eroe"
-        value={schedaDati.name || ''}
-        onChange={(val) => onUpdate({ ...schedaDati, name: val })}
-        disabled={!isOwner && !isMaster}
-      />
+    <div className="flex flex-col gap-4 text-text-main font-sans">
+      <div className="p-4 bg-surface border border-border-app rounded-2xl flex gap-4">
+        <FieldBox
+          label="Nome Personaggio"
+          value={schedaDati.name || ''}
+          onChange={(val) => handleStatChange('name', val)}
+          disabled={isEditingDisabled}
+        />
+      </div>
 
-      <StatBox
-        label="Forza"
-        value={schedaDati.str || 10}
-        onChange={(val) => onUpdate({ ...schedaDati, str: Number(val) })}
-        onRollDice={(expr, reason) => {
-          const req = formatRollParams({ formula: expr, label: reason });
-          onRollDice?.(req.formula, req.label, req.sources, req.description, req.options);
-        }}
-      />
+      <PluginSectionCard title="Caratteristiche" variant="default">
+        <div className="grid grid-cols-3 gap-3">
+          <StatBox
+            label="FOR"
+            value={schedaDati.str ?? 10}
+            disabled={isEditingDisabled}
+            onChange={(val) => handleStatChange('str', Number(val))}
+            onRollDice={() => handleRoll('Forza', schedaDati.str ?? 10)}
+          />
+        </div>
+      </PluginSectionCard>
     </div>
   );
 };
 
-export const MioSistemaPlugin = defineGameSystem({
-  id: 'mio-sistema',
+export const MySystemPlugin: GameSystemPlugin = defineGameSystem({
+  id: 'my-system',
   name: 'Mio Sistema RPG',
-  description: 'Un fantastico sistema di gioco personalizzato.',
+  description: 'Descrizione del sistema personalizzato.',
   recommendedTheme: 'arcane', // 'arcane' | 'crimson' | 'emerald' | 'abyssal' | 'amber' | 'dark-amber' | 'obsidian'
-  defaultGrid: { unit: 'meters', diagonal: 'euclidean' },
-  defaultCharacterData: { name: 'Nuovo Personaggio', str: 10 },
-  CharacterSheet: MioSheet,
+  sheetWidth: 'md:max-w-4xl',
+  defaultGrid: {
+    unit: 'meters',          // 'meters' | 'feet'
+    diagonal: 'euclidean',   // 'euclidean' | 'dnd5e' | 'alternating'
+  },
+  defaultCharacterData: {
+    name: 'Nuovo Eroe',
+    str: 14,
+    hp: 10,
+    hpMax: 10,
+  },
+  CharacterSheet: MySystemSheet,
 });
 
-export default MioSistemaPlugin;
+export default MySystemPlugin;
 ```
 
 ---
 
-## 🧰 Funzionalità della Sandbox di Sviluppo
+### 2. Lancio Dadi & Anti-Cheat (`formatRollParams` e `onRollComplete`)
 
-- 🎨 **Selettore dei 7 Temi RPG Scuro**: Verifica all'istante la resa grafica della tua scheda su tutti i temi di WizVTT (Arcane, Crimson, Emerald, Abyssal, Amber, Dark Amber, Obsidian).
-- 🎲 **Simulatore Motore Dadi Reale**: Quando la tua scheda chiama `onRollDice`, la Sandbox calcola il tiro con animazione toast, gestisce vantaggio/svantaggio e chiama `onRollComplete`.
-- 👑 **Simulazione Ruoli**: Testa come si comporta la scheda dal punto di vista del Giocatore Proprietario, del Game Master o di uno Spettatore in sola lettura.
-- 💾 **Ispettore JSON & Import/Export**: Visualizza in tempo reale i dati salvati nella scheda ed esporta/importa file `.json`.
+In WizVTT i dadi vengono calcolati in modo autoritativo sul server per prevenire cheat:
+
+```ts
+import { formatRollParams, type RollResult } from '@/sdk';
+
+// 1. Formatta la richiesta
+const req = formatRollParams({
+  formula: '1d20+4',
+  label: 'Tiro per Colpire con Ascia',
+  sources: [
+    { name: 'Base', formula: '1d20+2', type: 'base' },
+    { name: 'Bonus Arma Magica', formula: '+2', type: 'effect' }
+  ],
+  rollMode: 'advantage',      // Converte automaticamente 1d20 -> 2d20kh1
+  rollVisibility: 'private',  // Invia il tiro solo al mittente ed al Master
+});
+
+// 2. Invia la richiesta con callback di ritorno
+onRollDice?.(req.formula, req.label, req.sources, req.description, {
+  ...req.options,
+  onRollComplete: (rollData: RollResult) => {
+    console.log('Risultato ufficiale:', rollData.total, rollData.results);
+    // Aggiorna lo stato della scheda in base all'esito!
+  }
+});
+```
 
 ---
 
-## 📤 Come Inviare il tuo Sistema a WizVTT
+### 3. Motore di Temi (7 Stili RPG Scuri & Classi Semantiche)
 
-Quando la tua scheda è pronta:
-1. Copia la cartella `src/systems/my-system/` (o fai una Pull Request su GitHub).
-2. Il sistema verrà aggiunto a WizVTT e sarà immediatamente disponibile per tutti i giocatori della community!
+WizVTT mette a disposizione **7 palette scure RPG**:
+
+| ID Tema | Nome | Atmosfera | Colore Primario |
+| :--- | :--- | :--- | :--- |
+| `arcane` | **Arcane** | Magia & Mistero (Predefinito) | Viola Arcano (`#a855f7`) |
+| `crimson` | **Crimson** | Sangue, Vampiri & Dark Fantasy | Rubino Cremisi (`#e11d48`) |
+| `emerald` | **Emerald** | Natura, Foreste & Druidi | Verde Smeraldo (`#059669`) |
+| `abyssal` | **Abyssal** | Mecha, Anime Shonen & Oceano | Blu Profondo (`#0284c7`) |
+| `amber` | **Amber** | Paladini, Sole & Deserto | Oro / Ambra (`#d97706`) |
+| `dark-amber`| **Dark Amber**| Gotico, Fucina & Warhammer | Ambra Brunita (`#b45309`) |
+| `obsidian` | **Obsidian** | Ombre, Stealth & Cyberpunk | Grafite / Ardesia (`#64748b`) |
+
+#### Classi CSS Semantiche da utilizzare:
+- **Sfondi**: `bg-app` (sfondo base), `bg-surface` (pannelli), `bg-panel` (card interne).
+- **Colori Primari**: `bg-theme-primary`, `text-theme-primary`, `bg-theme-primary-hover`.
+- **Accenti**: `bg-theme-accent`, `text-theme-accent`.
+- **Bordi**: `border-border-app`, `border-border-accent`.
+- **Testo**: `text-text-main`, `text-text-muted`, `text-text-dim`.
 
 ---
 
-## 📄 Licenza
-MIT / CC BY-NC-SA 4.0 Open Source.
+### 4. UI Kit Primitivo (`TraitChip`, `PipTracker`, `StepperControl`, ecc.)
+
+L'SDK esporta componenti React già ottimizzati per sessioni su desktop e tablet:
+
+```tsx
+import {
+  TraitChip,
+  PipTracker,
+  StepperControl,
+  PluginSectionCard,
+  clampValue,
+} from '@/sdk';
+
+// 1. Chip Tratti Interattivi (per talenti, abilità, keyword)
+<TraitChip
+  label="Riflessi Fulminei"
+  type="Talento"
+  variant="vital" // 'vital' | 'identity' | 'curriculum' | 'default'
+  bonusLabel="+d8"
+  isSelected={isTraitActive}
+  onToggle={() => setIsTraitActive(!isTraitActive)}
+/>
+
+// 2. Tracciatore Visivo di Risorse (HP, Ferite, Mana, Punti Azione)
+<PipTracker
+  label="Punti Ferita"
+  current={schedaDati.hp}
+  max={schedaDati.hpMax}
+  color="rose"     // 'rose' | 'amber' | 'sky' | 'emerald' | 'purple'
+  shape="diamond"  // 'circle' | 'diamond' | 'square'
+  criticalThreshold={schedaDati.hpMax - 1} // Attiva animazione di allerta se quasi vuoto
+  onChange={(val) => onUpdate({ ...schedaDati, hp: clampValue(val, 0, schedaDati.hpMax) })}
+/>
+
+// 3. Controlli Numerici Compatti [-] val [+]
+<StepperControl
+  label="Grado Abilità"
+  value={schedaDati.rank}
+  min={1}
+  max={5}
+  onChange={(val) => onUpdate({ ...schedaDati, rank: val })}
+/>
+
+// 4. Card Sezione con Glassmorphism
+<PluginSectionCard title="Equipaggiamento" variant="sky" badge="3/10 Slot">
+  <p className="text-xs">Contenuto della sezione...</p>
+</PluginSectionCard>
+```
+
+---
+
+### 5. Motore per Pool di Dadi Ibridi (`evaluateDicePool`)
+
+Per giochi come *Knights of the Round: Academy*, *Year Zero Engine*, *Blades in the Dark* o *World of Darkness*:
+
+```ts
+import { evaluateDicePool, createDiceSources } from '@/sdk';
+
+const result = evaluateDicePool({
+  positiveDice: { d8: 3, d12: 1 }, // 3 dadi tratto (d8) + 1 dado maestria (d12)
+  negativeDice: { d6: 2 },         // 2 dadi ostacolo (d6)
+  successThreshold: 6,             // Successo con dado >= 6
+  triumphValue: 12,                // Trionfo su 12 naturale
+  disasterValue: 1,                // Disastro su 1 naturale
+});
+
+console.log(result.outcomeText); // "Successo Pieno" | "Successo con Conseguenze" | "Fallimento"
+console.log(result.desc);        // Stringa Markdown generata per la chat
+```
+
+---
+
+### 6. Proiezione "Mostra a Schermo" (`onShowAsset`)
+
+Consente di portare un'immagine a schermo intero per tutti i partecipanti della stanza:
+
+```tsx
+<button onClick={() => onShowAsset?.(schedaDati.url_avatar, schedaDati.name)}>
+  Mostra Ritratto a Tutti
+</button>
+```
+
+---
+
+### 7. Import / Export Scheda in JSON
+
+```ts
+import { exportCharacterToJson, parseCharacterJson } from '@/sdk';
+
+// Esporta la scheda come file .json
+exportCharacterToJson(schedaDati, 'my-system');
+
+// Carica e valida da stringa JSON
+const imported = parseCharacterJson(jsonString);
+if (imported) onUpdate(imported);
+```
+
+---
+
+## 🧰 Funzionalità della Developer Sandbox
+
+La Sandbox (`npm run dev`) include una suite di strumenti pensata per rendere lo sviluppo rapido e piacevole:
+
+- 🎨 **Selettore Temi Istantaneo**: Testa la tua scheda su tutti i 7 temi RPG con 1 click.
+- 🎲 **Console Tiri & Log Real-Time**: Visualizza i dettagli dei dadi lanciati, le formule e gli esiti narrativi.
+- 👑 **Simulazione Permessi**: Passa istantaneamente tra le viste *Giocatore (Proprietario)*, *Master (Tutti i permessi)* e *Sola Lettura (Ospite)* per testare la disabilitazione corretta dei campi.
+- 💾 **Ispettore JSON Live**: Monitora in diretta l'oggetto `schedaDati` mentre modifichi input e pulsanti.
+- 🖼️ **Simulatore Proiezione Schermo**: Testa il comportamento del modal `onShowAsset`.
+
+---
+
+## 📤 Come Pubblicare o Inviare il Tuo Sistema a WizVTT
+
+Quando la tua scheda è pronta e testata:
+
+1. **Invia una Pull Request**:
+   - Apri una PR aggiungendo la cartella del tuo plugin in `src/plugins/systems/<nome-sistema>/`.
+2. **Oppure condividi il tuo repository**:
+   - Puoi pubblicare il tuo repo standalone e inviare una segnalazione alla community di WizVTT.
+3. Il plugin verrà registrato automaticamente tramite `import.meta.glob` ed entrerà a far parte dei sistemi disponibili sulla piattaforma!
+
+---
+
+## 📄 Licenza & Contributi
+
+Questo Starter Kit fa parte dell'ecosistema open source di **[WizVTT](https://wizvtt.com)** ed è rilasciato sotto licenza **MIT / CC BY-NC-SA 4.0**.
+
+Sviluppato con ❤️ per la community dei giochi di ruolo da tavolo.
