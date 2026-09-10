@@ -36,11 +36,23 @@ Questo repository standalone fornisce tutti gli strumenti, i tipi TypeScript, i 
 ### Prerequisiti
 - **Node.js** (v20 o superiore) oppure **Bun** (v1.1 o superiore) o **pnpm / yarn**.
 
-### 1. Inizializzazione rapida con `degit` (Consigliato)
-Crea direttamente il tuo nuovo progetto senza scaricare la cronologia git:
+### 1. Inizializzazione rapida del progetto
 
+#### Opzione A: Con il CLI Ufficiale (Consigliato)
 ```bash
-# Con npx (NPM)
+# Con NPM
+npm create wizvtt-system mio-sistema-rpg
+
+# Con npx
+npx create-wizvtt-system mio-sistema-rpg
+
+# Con Bun
+bun create wizvtt-system mio-sistema-rpg
+```
+
+#### Opzione B: Con `degit` (direttamente da GitHub)
+```bash
+# Con npx
 npx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
 
 # Con Bun
@@ -50,7 +62,7 @@ bunx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
 pnpx degit LuigiCervellera/wizvtt-sdk-docs mio-sistema-rpg
 ```
 
-*Oppure clona direttamente con Git:*
+#### Opzione C: Clonazione Git
 ```bash
 git clone https://github.com/LuigiCervellera/wizvtt-sdk-docs.git mio-sistema-rpg
 ```

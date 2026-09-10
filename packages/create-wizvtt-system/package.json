@@ -1,0 +1,27 @@
+{
+  "name": "create-wizvtt-system",
+  "version": "1.0.0",
+  "description": "CLI to scaffold a new WizVTT System Plugin project",
+  "main": "index.js",
+  "bin": {
+    "create-wizvtt-system": "./bin/index.js"
+  },
+  "keywords": [
+    "wizvtt",
+    "ttrpg",
+    "vtt",
+    "rpg-system",
+    "scaffold",
+    "template"
+  ],
+  "author": "WizVTT Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuigiCervellera/wizvtt-sdk-docs.git"
+  },
+  "files": [
+    "bin",
+    "templates"
+  ]
+}
