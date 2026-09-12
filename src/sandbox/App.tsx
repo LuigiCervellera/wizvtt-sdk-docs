@@ -236,7 +236,7 @@ export default function App() {
       {/* MAIN TWO-COLUMN WORKBENCH */}
       <main className="max-w-7xl mx-auto w-full p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-start">
         {/* LEFT COLUMN: ACTIVE CHARACTER SHEET */}
-        <section className={`w-full ${activePlugin.sheetWidth || 'lg:col-span-8'} space-y-4`}>
+        <section className="w-full lg:col-span-8 space-y-4">
           <div className="bg-panel border border-border-app rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <activePlugin.CharacterSheet
               characterId="test-character-01"
