@@ -1,7 +1,7 @@
 {
   "name": "create-wizvtt-system",
-  "version": "1.0.2",
-  "description": "CLI to scaffold a new WizVTT System Plugin project",
+  "version": "1.0.3",
+  "description": "CLI to scaffold a new WizVTT System Plugin project with Scene Loading & UI Components",
   "main": "index.js",
   "bin": {
     "create-wizvtt-system": "./bin/index.js"
